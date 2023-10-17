@@ -1,0 +1,652 @@
+/*
+Kotian, Apeksha Appu :  1002074079
+Jaglan, Meghna :  1002053631
+Kopparthi, Sai Venkat Reddy :  1002113962
+Moturi, Sesha Sai Srilekha :  1002110596
+Konagari, Vishnupriya Reddy :  1002118979
+*/
+/* Reset some default browser styles */
+body, h1, ul, li, p {
+    margin: 0;
+    padding: 0;
+}
+/* Header styling */
+header {
+    background-color: #0074D9;
+    color: #fff;
+    padding: 20px;
+}
+
+header h1 {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 250px;
+    height: 100%;
+    background-color: #66B2FF; /* Theme color: blue */
+    color: #fff; /* Text color: white */
+    transition: all 0.3s;
+    z-index: 1000; /* Ensure the sidebar is above other content */
+}
+
+.sidebar .logo {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.sidebar .logo h1 {
+    color: #fff; /* Logo text color */
+}
+
+.sidebar ul.menu {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul.menu li {
+    padding: 10px;
+}
+
+.sidebar ul.menu li a {
+    color: #fff; /* Menu text color */
+    text-decoration: none;
+    display: block;
+}
+
+/*.content header .toggle-button {*/
+/*    !*position: absolute;*!*/
+/*    !*top: 20px;*!*/
+/*    !*left: 10px;*!*/
+/*    display: none;*/
+/*    cursor: pointer;*/
+/*    margin-right: 8px;*/
+/*}*/
+
+.content header .toggle-button span {
+    width: 25px;
+    height: 3px;
+    background-color: #fff; /* Toggle button color */
+    display: block;
+    margin: 5px 0;
+    transition: all 0.3s;
+}
+
+.content header .toggle-button {
+    display: none; /* Hide the button by default */
+    cursor: pointer;
+}
+
+.close-icon {
+    display: block; /* Hide the close icon by default */
+    cursor: pointer;
+    margin-left: auto; /* Push the close icon to the right side of the top bar */
+    font-size: 24px; /* Adjust the icon size as needed */
+    color: #fff; /* Icon color */
+}
+
+/* Show the button on small screens */
+@media screen and (max-width: 768px) {
+    .content header .toggle-button {
+        display: block; /* Show the button on small screens */
+    }
+}
+
+
+/* Sidebar collapsed state */
+.sidebar.collapsed {
+    width: 70px;
+}
+
+.sidebar.collapsed ul.menu li a {
+    display: none; /* Hide menu items when collapsed */
+}
+
+.sidebar.collapsed .toggle-button span {
+    width: 25px;
+    margin: 2px 0;
+}
+
+.sidebar ul.menu {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul.menu li {
+    padding: 10px;
+}
+
+.sidebar ul.menu li a {
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    font-family: 'Arial', sans-serif; /* Use an appropriate font-family */
+    font-size: 16px; /* Set the font size */
+}
+
+.sidebar ul.menu li i {
+    margin-right: 10px;
+    width: 20px;
+    fill: #fff;
+}
+
+.sidebar ul.menu li:hover {
+    background-color: #007BFF; /* Background color on hover */
+}
+
+.sidebar ul.menu li:hover a {
+    color: #ffffff; /* Text color on hover */
+}
+
+/* Content Styles */
+.content {
+    margin-left: 250px;
+    padding: 20px;
+    transition: all 0.3s;
+}
+
+.content header {
+    margin-bottom: 20px;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+    .sidebar.collapsed {
+        display: none; /* Hide sidebar on smaller screens */
+    }
+
+    /*display close icon if the sidebar is collapsed*/
+    .sidebar {
+        display: block;
+    }
+
+    .content {
+        margin-left: 0;
+    }
+}
+
+/* Hide close icon in large screens */
+@media screen and (min-width: 768px) {
+    .close-icon {
+        display: none;
+    }
+}
+
+/* Performance Table Styles */
+.performance-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.performance-table th,
+.performance-table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+.performance-table th {
+    background-color: #007BFF;
+    color: #fff;
+}
+
+.performance-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Action column styles */
+.action-column {
+    width: 10%;
+}
+
+/* Font Awesome icon styles */
+.view-icon {
+    color: #007bff;
+    cursor: pointer;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+    .performance-table {
+        font-size: 14px; /* Decrease font size for smaller screens */
+    }
+
+    .performance-table th,
+    .performance-table td {
+        padding: 5px; /* Decrease padding for smaller screens */
+    }
+
+    .performance-table th {
+        font-size: 16px; /* Increase header font size for readability */
+    }
+}
+
+/* Form styles */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group{
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+label {
+    margin-bottom: 8px;
+    /*color: #0074D9; !* Blue color *!*/
+}
+
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+select,
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+textarea {
+    resize: vertical;
+}
+
+input[type="submit"] {
+    background-color: #0074D9; /* Blue color */
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.3s;
+}
+
+input[type="submit"]:hover {
+    background-color: #00d90b; /* Blue color */
+}
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+    main {
+        padding: 10px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea {
+        font-size: 14px;
+    }
+
+    input[type="submit"] {
+        font-size: 16px;
+        padding: 8px 16px;
+    }
+}
+
+.form-container {
+    width: 50%;
+    margin: 20px auto;
+    text-align: center;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Dashboard styles */
+.dashboard {
+    max-width: 1200px;
+    margin: 20px auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+/* Card styles */
+.card {
+    /*background-color: #fff;*/
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    flex-basis: calc(33.33% - 20px);
+    box-sizing: border-box; /* Ensure padding doesn't affect width */
+
+    /* Background color for the card */
+    background-color: #f0f0f0; /* You can change this color accordingly */
+}
+
+.card h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.card p {
+    font-size: 18px;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+    .card {
+        flex-basis: calc(50% - 20px);
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .card {
+        flex-basis: 100%;
+    }
+}
+
+/* Course details page styles */
+
+.container {
+    max-width: 100%;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+/* Course details card */
+.course-card {
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    overflow-x: auto; /* Enable horizontal scrolling */
+}
+
+.course-card h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.description {
+    font-size: 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/*!* Tables *!*/
+/*table {*/
+/*    width: 100%;*/
+/*    border-collapse: collapse;*/
+/*    margin-top: 20px;*/
+/*}*/
+
+/*th, td {*/
+/*    padding: 10px;*/
+/*    border: 1px solid #ddd;*/
+/*    text-align: left;*/
+/*}*/
+
+/*th {*/
+/*    background-color: #f0f0f0;*/
+/*}*/
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    .course-card {
+        padding: 10px;
+    }
+
+    .course-card h2 {
+        font-size: 18px;
+    }
+
+    .description {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .container {
+        max-width: 95%;
+    }
+
+    .course-card {
+        margin-bottom: 10px;
+    }
+
+    .description {
+        white-space: normal;
+    }
+}
+
+/* Chat Page Styles */
+/* Chat container */
+.chat-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Chat cards for large screens */
+.chat-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+/* User profile card */
+.chat-cards .user-card {
+    background-color: #fff;
+    flex-basis: calc(30% - 20px);
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Chat box card */
+.chat-box-card {
+    background-color: #fff;
+    flex-basis: calc(70% - 20px);
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 100%; /* Set maximum width to fit current screen */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
+/* User profile details */
+.user-details {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.user-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+}
+
+.user-info {
+    margin-left: 15px;
+}
+
+.user-name {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.user-role {
+    font-size: 16px;
+}
+
+/* Chat messages */
+.chat-messages {
+    /* max-height: 400px; Removed max-height to allow vertical scrolling */
+    overflow-y: auto; /* Enable vertical scrolling */
+    max-height: calc(100vh - 300px); /* Limit the maximum height */
+}
+
+.message {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.sender-message {
+    background-color: #007bff;
+    color: #fff;
+    align-self: flex-end;
+}
+
+.recipient-message {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.timestamp {
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+/* Message input */
+.message-input {
+    display: flex;
+    margin-top: 20px;
+}
+
+.message-input input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.message-input button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+    .chat-cards {
+        flex-direction: column;
+    }
+
+    .user-card,
+    .chat-box-card {
+        flex-basis: 100%;
+    }
+}
+
+/* Custom add button*/
+/* Custom button styles */
+.custom-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff; /* Default button color */
+    color: #fff; /* Text color */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.custom-button:hover {
+    background-color: #0056b3; /* Button color on hover */
+}
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+    .custom-button {
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+
+/* Charts Page Styles */
+.bar-chart {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    width: 400px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.bar {
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+}
+
+.bar-fill {
+    background-color: #2196F3;
+    width: 30px; /* Width of the bars */
+    transition: height 0.5s ease;
+}
+
+.bar-label {
+    margin-top: 5px;
+    font-weight: bold;
+    font-size: 10px;
+    font-family: sans-serif;
+    /*    setup word wrap*/
+    white-space: normal;
+    overflow: hidden;
+    word-wrap: break-word;
+    max-width: 120px;
+}
+
+.bar:nth-child(2) .bar-fill {
+    background-color: #FF5722;
+    height: 70%; /* Height of the bars */
+}
+
+.bar:nth-child(3) .bar-fill {
+    background-color: #4CAF50;
+    width: 60%;
+}
+
+.bar:nth-child(3) .bar-fill {
+    background-color: #4c68af;
+    width: 79%;
+}
+
+/* Responsive chart styles */
+@media screen and (max-width: 768px) {
+    .bar {
+        width: calc(50% - 10px); /* Adjust the width and spacing for smaller screens */
+    }
+}
