@@ -1,0 +1,23 @@
+{
+    "name": "beaver/beaver",
+    "description": "Beaver Backend",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Beaver\\Beaver\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Beaver",
+            "email": "beaver@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "ext-pdo": "*",
+        "ext-json": "*",
+        "lcobucci/jwt": "^5.0"
+    }
+}

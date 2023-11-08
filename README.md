@@ -1,24 +1,14 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Master of Science in Computer Science (UTA)
+Course: CSE 5335: Web Data Management
 
-## Getting Started
-run 'npm install'
-run 'npm run dev'
+Beaver is a semester long project created as part of  our coursework. 
+Check out the wiki to know more about Beaver!
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-
-if above do not work, try below:
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+ - [Phase 1](https://sxk3962.uta.cloud/Project_phase1/)
+	 Frontend implementation using HTML and CSS.
+ - [Phase 2](https://mxj3631.uta.cloud/)
+	Frontend implmentation using React.
+ - [Phase 3](https://axk4079.uta.cloud/login)
+	 Integration of React frontend with PHP and DB.
+ - Phase 4 (in progress)
+	 Include Laravel implmentation.
