@@ -1,5 +1,7 @@
 Master of Science in Computer Science (UTA)
 
+Fall'23 Group Project
+
 Course: CSE 5335: Web Data Management
 
 Beaver is a semester-long group project created as part of our coursework. 
