@@ -1,7 +1,8 @@
 Master of Science in Computer Science (UTA)
-Course: CSE 5335: Web Data Management
 
-Beaver is a semester long project created as part of  our coursework. 
+Course: CSE 5335 Web Data Management
+
+Beaver is a semester-long group project created as part of our coursework. 
 
 Check out our [wiki](https://github.com/meghna-cse/beaver/wiki) to know more about Beaver! 
 
