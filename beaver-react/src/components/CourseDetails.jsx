@@ -1,6 +1,7 @@
 import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {getRequest, postRequest} from "../api/api";
+import Swal from "sweetalert2";
 
 export default function CourseDetails(){
     // get the course id from the url
@@ -10,78 +11,57 @@ export default function CourseDetails(){
     const [exams, setExams] = useState([]);// [state, setState
     const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('user')));// [state, setState
 
-    // fetch the course details from the api
-    useEffect(() => {
-        async function fetchCourseDetails(){
-            try {
-                const details = await getRequest(`/courses.php?id=${id}`);
-                console.log(details.data.data ? details.data.data : {});
-                setCourse(details.data.data ? details.data.data[0] : {});
-            }catch (e) {
-                alert("Course not found");
+    async function fetchCourseObjectives(){
+        try {
+            const obj = await getRequest(`/course-objectives?course=${id}`);
+            setCourseObjectives(obj.data.data);
+        }catch (e) {
+            console.log(e);
+            // if http status code is 404, show alert
+            if(e.status === 404){
+                // alert("Course objectives not found");
+            }else{
+                // alert("An error occurred while fetching course objectives");
             }
         }
+    }
+
+    async function fetchExams(){
+        try {
+            const e = await getRequest(`/exams?course_id=${id}`);
+            setExams(e.data.data);
+        }catch (e) {
+            console.log(e);
+            // if http status code is 404, show alert
+            if(e.status === 404){
+                // alert("Exams not found");
+            }else{
+                // alert("An error occurred while fetching exams");
+            }
+        }
+    }
+
+    async function fetchCourseDetails(){
+        try {
+            const details = await getRequest(`/courses/${id}`);
+            setCourse(details.data.data);
+        }catch (e) {
+            // alert("Course not found");
+        }
+    }
+
+    // fetch the course details from the api
+    useEffect(() => {
         fetchCourseDetails();
     }, []);
 
     useEffect(() => {
-        async function fetchCourseObjectives(){
-            try {
-                //http://beaver-backend.tvtv/course_objectives.php?course_id=1
-                const obj = await getRequest(`/course_objectives.php?course_id=${id}`);
-                setCourseObjectives(obj.data.data);
-            }catch (e) {
-                console.log(e);
-                // if http status code is 404, show alert
-                if(e.status === 404){
-                    alert("Course objectives not found");
-                }else{
-                    alert("An error occurred while fetching course objectives");
-                }
-            }
-        }
         fetchCourseObjectives();
-    },[course]);
-
-    useEffect(() => {
-        async function fetchExams(){
-            try {
-                //http://beaver-backend.tvtv/exams.php?course_id=1
-                const e = await getRequest(`/exams.php?course_id=${id}`);
-                setExams(e.data.data);
-            }catch (e) {
-                console.log(e);
-                // if http status code is 404, show alert
-                if(e.status === 404){
-                    alert("Exams not found");
-                }else{
-                    alert("An error occurred while fetching exams");
-                }
-            }
-        }
         fetchExams();
     },[course]);
 
-    function handleEnrolActivity() {
-        if (currentUser.role_name === "student") {
-                console.log(currentUser.role_name);
-                const formData = {
-                    student_id: currentUser.id,
-                    course_id: course.id
-                }
-                try {
-                    const response = postRequest('/add_student_enrolments.php', formData);
-                    alert("Student enrolled successfully");
-                } catch (e) {
-                    console.log(e);
-                }
-            
-        }
-    }
-
     return (
         <>
-            {currentUser.role_name === "student" ? <button className="enroll-button" onClick={handleEnrolActivity}>Enroll</button> : <></>}
             <div className="container">
                 <h1>Course Details</h1>
                 <div className="course-card">

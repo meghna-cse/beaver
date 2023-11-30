@@ -1,6 +1,10 @@
 import {useEffect, useState} from "react";
 import {getRequest} from "../api/api";
 import {NavLink} from "react-router-dom";
+import {Button, Container} from "react-bootstrap";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faMessage} from "@fortawesome/free-solid-svg-icons";
+import {faRocketchat} from "@fortawesome/free-brands-svg-icons";
 
 export default function AvailableForChat(){
     const [adminUsers, setAdminUsers] = useState([]);// [state, setState
@@ -15,29 +19,28 @@ export default function AvailableForChat(){
     useEffect(() => {
         async function fetchAdminUsers(){
             try {
-                //http://beaver-backend.tvtv/admin_users.php
-                const adminUsers = await getRequest(`/users.php?role_id=3`);
+                const adminUsers = await getRequest(`/users?role_id=3`);
                 setAdminUsers(adminUsers.data.data);
             }catch (e) {
                 // if http status code is 404, show alert
                 if(e.status === 404){
-                    alert("Admin users not found");
+                    // alert("Admin users not found");
                 }else{
-                    alert("An error occurred while fetching admin users");
+                    // alert("An error occurred while fetching admin users");
                 }
             }
         }
 
         async function fetchInstructors(){
             try {
-                const instructors = await getRequest(`/users.php?role_id=5`);
+                const instructors = await getRequest(`/users?role_id=5`);
                 setInstructors(instructors.data.data);
             }catch (e) {
                 // if http status code is 404, show alert
                 if(e.status === 404){
-                    alert("Instructors not found");
+                    // alert("Instructors not found");
                 }else{
-                    alert("An error occurred while fetching instructors");
+                    // alert("An error occurred while fetching instructors");
                 }
             }
         }
@@ -45,14 +48,14 @@ export default function AvailableForChat(){
         // fetch coordinators
         async function fetchCoordinators(){
             try {
-                const coordinators = await getRequest(`/users.php?role_id=2`);
+                const coordinators = await getRequest(`/users?role_id=2`);
                 setCoordinators(coordinators.data.data);
             }catch (e) {
                 // if http status code is 404, show alert
                 if(e.status === 404){
-                    alert("Coordinators not found");
+                    // alert("Coordinators not found");
                 }else{
-                    alert("An error occurred while fetching coordinators");
+                    // alert("An error occurred while fetching coordinators");
                 }
             }
         }
@@ -60,14 +63,14 @@ export default function AvailableForChat(){
         // fetch students
         async function fetchStudents(){
             try {
-                const students = await getRequest(`/users.php?role_id=1`);
+                const students = await getRequest(`/users?role_id=1`);
                 setStudents(students.data.data);
             }catch (e) {
                 // if http status code is 404, show alert
                 if(e.status === 404){
-                    alert("Students not found");
+                    // alert("Students not found");
                 }else{
-                    alert("An error occurred while fetching students");
+                    // alert("An error occurred while fetching students");
                 }
             }
         }
@@ -98,9 +101,13 @@ export default function AvailableForChat(){
             });
     }, []);
 
+    const navLinkStyle = {
+        textDecoration:'none'
+    }
+
     return (
         <>
-            <div className="container">
+            <Container>
                 <div className="course-card">
                     <h2>Admin</h2>
                     <div className="table-container">
@@ -119,9 +126,10 @@ export default function AvailableForChat(){
                                         <tr key={index}>
                                             <td>{user.name}</td>
                                             <td>{user.username}</td>
-                                            <td>
-                                                <NavLink to={`${user.id}`} className="btn">
-                                                    Chat
+                                            <td className={"action-column"}>
+                                                <NavLink to={`${user.id}`} style={navLinkStyle}>
+                                                    <FontAwesomeIcon icon={faRocketchat}/>
+                                                    {' '} Chat
                                                 </NavLink>
                                             </td>
                                         </tr>
@@ -151,9 +159,10 @@ export default function AvailableForChat(){
                                         <tr key={index}>
                                             <td>{user.name}</td>
                                             <td>{user.username}</td>
-                                            <td>
-                                                <NavLink to={`${user.id}`} className="btn">
-                                                    Chat
+                                            <td className={"action-column"}>
+                                                <NavLink to={`${user.id}`} style={navLinkStyle}>
+                                                    <FontAwesomeIcon icon={faRocketchat}/>
+                                                    {' '} Chat
                                                 </NavLink>
                                             </td>
                                         </tr>
@@ -183,9 +192,10 @@ export default function AvailableForChat(){
                                         <tr key={index}>
                                             <td>{user.name}</td>
                                             <td>{user.username}</td>
-                                            <td>
-                                                <NavLink to={`${user.id}`} className="btn">
-                                                    Chat
+                                            <td className={"action-column"}>
+                                                <NavLink to={`${user.id}`} style={navLinkStyle}>
+                                                    <FontAwesomeIcon icon={faRocketchat}/>
+                                                    {' '} Chat
                                                 </NavLink>
                                             </td>
                                         </tr>
@@ -215,9 +225,10 @@ export default function AvailableForChat(){
                                         <tr key={index}>
                                             <td>{user.name}</td>
                                             <td>{user.username}</td>
-                                            <td>
-                                                <NavLink to={`${user.id}`} className="btn">
-                                                    Chat
+                                            <td className={"action-column"}>
+                                                <NavLink to={`${user.id}`} style={navLinkStyle}>
+                                                    <FontAwesomeIcon icon={faRocketchat}/>
+                                                    {' '} Chat
                                                 </NavLink>
                                             </td>
                                         </tr>
@@ -228,7 +239,7 @@ export default function AvailableForChat(){
                         </table>
                     </div>
                 </div>
-            </div>
+            </Container>
         </>
     )
 }

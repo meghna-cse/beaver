@@ -1,34 +1,51 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import async from "async";
 import {getRequest} from "../../api/api";
 import GradeGenerator from "../../components/utils/GradeGenerator";
+import Swal from "sweetalert2";
+import {Card, CardBody, CardTitle, Container} from "react-bootstrap";
+import {Line} from "react-chartjs-2";
 
 export default function StudentHome(){
     const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('user')));// [state, setState
     const [enrolledCourses, setEnrolledCourses] = useState([]);// [state, setState
     const [averageScore, setAverageScore] = useState(0);// [state, setState
     const [coursePerformance, setCoursePerformance] = useState([]);// [state, setState
+    const [graphData, setGraphData] = useState({labels:[],datasets:[]});// [state, setState
+    const [graphLoaded, setGraphLoaded] = useState(false);// [state, setState
+    const options = {
+        responsive: true,
+        plugins: {
+            legend: {
+                display: true,
+                position: 'bottom',
+            },
+            title: {
+                display: true,
+                text: 'Chart.js Line Chart',
+            },
+        },
+    };
 
     useEffect(() => {
         // fetch student enrolled course
         async function fetchStudentEnrolledCourse(){
             try {
-                const response = await getRequest(`/student_enrolments.php?student_id=${currentUser.id}`);
-                console.log(response.data.data);
+                const response = await getRequest(`/student-enrolments?student=${currentUser.id}`);
                 setEnrolledCourses(response.data.data);
             }catch (e) {
                 console.log(e)
-                if (e.status === 404) {
-                    alert("Enrolled courses not found");
+                if (e.status >= 400 && e.status < 500) {
+                    // alert("Enrolled courses not found");
                 } else {
-                    alert("An error occurred while fetching enrolled courses");
+                    // alert("An error occurred while fetching enrolled courses");
                 }
             }
         }
 
         async function fetchStudentPerformance(){
             try {
-                const response = await getRequest(`/student_performances.php?student_id=${currentUser.id}`);
+                const response = await getRequest(`/student-performances?student_id=${currentUser.id}`);
                 // sum the score in all this and find average
                 let totalScore = 0;
                 let performances = response.data.data;
@@ -38,6 +55,21 @@ export default function StudentHome(){
                     setCoursePerformance([])
                     return;
                 }
+                const averageScoresData = response.data.data;
+
+                // define the graph data
+                // create labels with an array of course names but an initial empty string
+                const labels = [].concat(...averageScoresData.map((course) => course.exam.name));
+                const datasets = [
+                    {
+                        label: '',
+                        data: [].concat(...averageScoresData.map((course) => course.score)),
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1,
+                    },
+                ];
+                setGraphData({labels, datasets});
 
                 setCoursePerformance(performances);
                 performances.forEach((performance) => {
@@ -47,47 +79,25 @@ export default function StudentHome(){
                         totalScore += score;
                     }
                 });
-                setAverageScore(performances.length > 0 ? totalScore / performances.length : 0);
+                setAverageScore(performances.length > 0 ? Math.round((totalScore / performances.length * 100) / 100) : 0);
             }catch (e) {
                 if (e.status === 404) {
-                    alert("Enrolled courses not found");
+                    // alert("Enrolled courses not found");
                 } else {
-                    alert("An error occurred while fetching enrolled courses");
+                    // alert("An error occurred while fetching enrolled courses");
                 }
             }
         }
         fetchStudentEnrolledCourse();
-        fetchStudentPerformance();
+        fetchStudentPerformance()
+            .then(() => {
+                setGraphLoaded(true);
+            });
 
     }, []);
 
-
-    const style1 = {
-        height: '300px'
-    }
-
-    const style2 = {
-        height: '120px'
-    }
-
-    const style3 = {
-        height: '80px'
-    }
-
-    const style4 = {
-        height: '180px'
-    }
-
-    const style5 = {
-        height: '160px'
-    }
-
-    const style6 = {
-        height: '25px'
-    }
-
     return (
-        <>
+        <Container>
             <div className="dashboard">
                 {/*// <!-- Card 1: Enrolled Courses -->*/}
                 <div className="card">
@@ -96,6 +106,11 @@ export default function StudentHome(){
                 </div>
 
                 {/*// <!-- Card 2: Average Score -->*/}
+                <div className="card">
+                    <h2>Exams Done</h2>
+                    <p>{coursePerformance.length}</p>
+                </div>
+
                 <div className="card">
                     <h2>Average Score</h2>
                     <p>{averageScore}%</p>
@@ -117,7 +132,7 @@ export default function StudentHome(){
                     coursePerformance.map((performance) => {
                         return (
                             <tr key={performance.id}>
-                                <td>{performance.exam_name}</td>
+                                <td>{performance.exam.name}</td>
                                 <td>{performance.score}%</td>
                                 <td><GradeGenerator scoreString={performance.score}/></td>
                             </tr>
@@ -126,6 +141,22 @@ export default function StudentHome(){
                 }
                 </tbody>
             </table>
-        </>
+
+            <br/>
+            <br/>
+
+            <Card>
+                <CardTitle><center>Student Performance</center></CardTitle>
+                <CardBody>
+                    {
+                        graphLoaded && coursePerformance.length > 0 ? (
+                            <Line data={graphData} options={options}/>
+                        ) : (
+                            <div>Loading...</div>
+                        )
+                    }
+                </CardBody>
+            </Card>
+        </Container>
     )
 }

@@ -1,6 +1,11 @@
+import {Container, Jumbotron} from "react-bootstrap";
+// import Jumbotron from "react-bootstrap/esm/Jumbotron";
+import React from "react";
+import {Link} from "react-router-dom";
+
 export default function About(){
     return (
-        <div className="container">
+        <Container className={'my-5'}>
             <section id="about-us" className="page-section">
                 <h1>About Us</h1>
                 <p>Welcome to our Learning Management System, where learning meets innovation. We are dedicated to revolutionizing education and training through cutting-edge technology and a passion for knowledge.</p>
@@ -19,8 +24,8 @@ export default function About(){
 
                 <h2>Get in Touch</h2>
                 <p>If you have any questions or would like to learn more about our Computing Department, please do not hesitate to contact us. We are here to assist you on your journey to excellence in computing.</p>
-                <p><a href={"contact-us"}>Contact us</a></p>
+                <Link to={'/contact'} className={'btn btn-primary'}>Contact Us</Link>
             </section>
-        </div>
+        </Container>
     )
 }

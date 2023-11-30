@@ -10,7 +10,6 @@ import Contact from "./routes/Contact";
 import Services from "./routes/Services";
 import Register from "./routes/Register";
 import Login from "./routes/Login";
-import OnlyForDemo from "./routes/OnlyForDemo";
 import DashboardApp from "./DashboardApp";
 import StudentHome from "./routes/student/StudentHome";
 import StudentCourses from "./routes/student/StudentCourses";
@@ -51,6 +50,12 @@ import AdministratorHome from "./routes/administrator/AdministratorHome";
 import {ProtectedRoute} from "./components/utils/ProtectedRoute";
 import {AuthLayout} from "./components/utils/AuthLayout";
 import {AuthProvider} from "./components/utils/AuthProvider";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import ForgotPassword from "./routes/ForgotPassword";
+import FailedEmailVerification from "./routes/FailedEmailVerification";
+import ResetPassword from "./routes/ResetPassword";
+import StudentFeedbackForm from './routes/student/StudentFeedbackForm';
+import FeedbackAnalysis from './components/FeedbackAnalysis';
 
 const getUserData = () =>
     new Promise((resolve) =>
@@ -63,11 +68,7 @@ const getUserData = () =>
 const router = createBrowserRouter([
     {
         path: "/",
-        action: () => <div>Hello world</div>,
         element: <AuthProvider><App/></AuthProvider>,
-        css: [
-            './App.css',
-        ],
         errorElement: <ErrorPage/>,
         children: [
             {
@@ -95,8 +96,16 @@ const router = createBrowserRouter([
                 element:<Login/>,
             },
             {
-                path: "only-for-demo",
-                element: <OnlyForDemo/>,
+                path: "/forgot-password",
+                element:<ForgotPassword/>,
+            },
+            {
+                path: "/failed-email-verification",
+                element:<FailedEmailVerification/>,
+            },
+            {
+                path: "/reset-password/:token",
+                element:<ResetPassword/>,
             }
         ]
     },
@@ -132,6 +141,10 @@ const router = createBrowserRouter([
             {
                 path: "/student/available-for-chat/:id",
                 element: <Chat/>,
+            },
+            {
+                path: "/student/feedback",
+                element: <StudentFeedbackForm/>,
             }
         ]
     },
@@ -173,11 +186,11 @@ const router = createBrowserRouter([
                 element:<InstructorExams/>,
             },
             {
-                path: "/instructor/exams/student-performance",
+                path: "/instructor/exams/student-performance/:id",
                 element:<InstructorStudentPerformance/>,
             },
             {
-                path: "/instructor/exams/student-performance/add",
+                path: "/instructor/exams/student-performance/:examId/add",
                 element:<InstructorAddPerformance/>,
             },
             {
@@ -222,6 +235,10 @@ const router = createBrowserRouter([
             {
                 path: "/coordinator/courses/add-course",
                 element: <CoordinatorAddCourse/>,
+            },
+            {
+                path: "/coordinator/feedback-analysis",
+                element: <FeedbackAnalysis/>,
             }
         ]
     },
@@ -308,6 +325,10 @@ const router = createBrowserRouter([
             {
                 path: "/quality-assurance/courses/details/feedback/:id",
                 element: <QAAddFeedback/>,
+            },
+            {
+                path: "/quality-assurance/feedback-analysis",
+                element: <FeedbackAnalysis/>,
             }
 
         ]
@@ -316,10 +337,11 @@ const router = createBrowserRouter([
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    {/*<App />*/}
-    <RouterProvider router={router} />
-  </React.StrictMode>
+  // <React.StrictMode>
+  //   {/*<App />*/}
+  //
+  // </React.StrictMode>
+<RouterProvider router={router} />
 );
 
 // If you want to start measuring performance in your app, pass a function

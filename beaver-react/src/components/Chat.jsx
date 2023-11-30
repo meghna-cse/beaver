@@ -1,6 +1,8 @@
 import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {getRequest, postRequest} from "../api/api";
+import {io} from "socket.io-client";
+import Swal from "sweetalert2";
 
 export default function Chat() {
     // get id from params
@@ -9,50 +11,66 @@ export default function Chat() {
     const [messages, setMessages] = useState([]);// [state, setState
     const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('user')));// [state, setState
     const [formData, setFormData] = useState({
-        content: ""
+        message_content: ""
     });// [state, setState
     const [isSentMessage, setIsSentMessage] = useState(false);// [state, setState
+    const socket = io('http://localhost:9078',{
+        retries:3
+    });
+    const [isReceivedNewMessage,setIsReceivedNewMessage] =useState(false);
 
-    useEffect(() => {
-        // fetch user details using the id provided
-        async function fetchUserDetails() {
-            try {
-                //http://beaver-backend.tvtv/users.php?id=1
-                const user = await getRequest(`/users.php?id=${id}`);
-                setChatWith(user.data.data[0]);
-            } catch (e) {
-                // if http status code is 404, show alert
-                if (e.status === 404) {
-                    alert("User not found");
-                } else {
-                    alert("An error occurred while fetching user");
-                }
+    async function fetchMessages(){
+        try {
+            // url structure 'chat-messages/{sender_id}/{receiver_id}'
+            const m = await getRequest(`/chat-messages/${currentUser.id}/${id}`);
+            setMessages(m.data.data);
+        }catch (e) {
+            console.log(e);
+            // if http status code is 404, show alert
+            if(e.status === 404){
+                // alert("Messages not found");
+            }else{
+                // alert("An error occurred while fetching messages");
             }
         }
-        fetchUserDetails();
+    }
 
+    async function fetchUserDetails() {
+        try {
+            const user = await getRequest(`/users/${id}`);
+            setChatWith(user.data.data);
+        } catch (e) {
+            // if http status code is 404, show alert
+            if (e.status === 404) {
+                // alert("User not found");
+            } else {
+                // alert("An error occurred while fetching user");
+            }
+        }
+    }
+
+    useEffect(() => {
+        fetchUserDetails();
+        socket.on('new_message_for_you',(data) =>{
+            // check if the receiver id matches the current user id
+            if (data.receiver_id == currentUser.id){
+                // wait for fetch messages to complete
+                // setIsSentMessage(!isSentMessage);
+                // fetchMessages()
+                console.log("New Message");
+                setIsReceivedNewMessage(!isReceivedNewMessage);
+            }
+        });
+
+        // return () => {
+        //     socket.disconnect();
+        // };
     }, []);
 
     useEffect(() => {
         // fetch chat messages
-        async function fetchMessages(){
-            try {
-                //http://beaver-backend.tvtv/messages.php?sender_id=1&recipient_id=2
-                const m = await getRequest(`/chat_messages.php?sender_id=${currentUser.id}&receiver_id=${id}`);
-                setMessages(m.data.data);
-            }catch (e) {
-                console.log(e);
-                // if http status code is 404, show alert
-                if(e.status === 404){
-                    alert("Messages not found");
-                }else{
-                    alert("An error occurred while fetching messages");
-                }
-            }
-        }
-
         fetchMessages();
-    }, [isSentMessage]);
+    }, [isSentMessage,isReceivedNewMessage]);
 
     const handleInputChange = (event) => {
         setFormData({
@@ -69,22 +87,23 @@ export default function Chat() {
         // convert formData to json string
         const data = JSON.stringify(formData);
 
-        // make api call to login
-        const response = await postRequest('/add_chat_message.php', data);
+        try{
+            // make api call to send chat message
+            const response = await postRequest('/chat-messages', data);
 
-        // if login is successful, redirect to home page
-        if(response.data.status === "success"){
-            // alert(response.data.message);
-            // window.location.reload();
-            setIsSentMessage(!isSentMessage);
-            // clear form data
-            setFormData({
-                content: ""
-            });
-            // clear form input
-            document.getElementById("content").value = "";
-        }else{
-            alert(response.data.message);
+            // if login is successful, redirect to home page
+            if(response.data.status === "success"){
+                console.log("Message sent");
+                socket.emit('message_sent', {"receiver_id": id});
+                setIsSentMessage(!isSentMessage);
+
+                // clear form input
+                document.getElementById("message_content").value = "";
+            }else{
+                // alert(response.data.message);
+            }
+        }catch (e){
+            console.log(e.message);
         }
     }
 
@@ -110,7 +129,7 @@ export default function Chat() {
                             {
                                 messages.map((message) => {
                                     return (
-                                        <div className={`message ${message.sender_id === currentUser.id ? 'sender-message' : 'recipient-message'}`}>
+                                        <div key={message.id} className={`message ${message.sender_id === currentUser.id ? 'sender-message' : 'recipient-message'}`}>
                                             {/*{message.sender_id === currentUser.id ? 'You' : chatWith.name}*/}
                                             {message.content}
                                             <span className="timestamp">{message.created_at}</span>
@@ -120,7 +139,8 @@ export default function Chat() {
                             }
                         </div>
                         <div className="message-input">
-                            <input id="content" type="text" placeholder="Type your message..." name="content" onChange={handleInputChange}/>
+                            <input id="message_content" type="text" placeholder="Type your message..."
+                                   name="message_content" onChange={handleInputChange}/>
                             <button onClick={handleSubmit}>Send</button>
                         </div>
                     </div>

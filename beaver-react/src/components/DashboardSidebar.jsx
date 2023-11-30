@@ -5,6 +5,9 @@ import QualityAssuranceNavItems from "./QualityAssuranceNavItems";
 import InstructorNavItems from "./InstructorNavItems";
 import CoordinatorNavItems from "./CoordinatorNavItems";
 import AdministratorNavItems from "./AdministratorNavItems";
+import {primaryColor} from "../colors";
+import {faTimes} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export default function DashboardSidebar(){
     const [isContentExpanded, setIsContentExpanded] = useState(false);
@@ -21,6 +24,11 @@ export default function DashboardSidebar(){
         sidebar.classList.add("collapsed");
     }
 
+    const handleOpenIconClick = () => {
+        const sidebar = document.querySelector(".sidebar");
+        sidebar.classList.remove("collapsed");
+    }
+
     // get the current page url
     useEffect(() => {
         setCurrentUrl(window.location.href.replace('/student-performance', ''));
@@ -33,13 +41,26 @@ export default function DashboardSidebar(){
     const isCoordinatorPage = currentUrl.includes('/coordinator');
     const isAdministratorPage = currentUrl.includes('/administrator');
 
+    const iconStyle = {
+        width: '20px',
+        height: '20px',
+    }
+
     return(
-        <div className={'sidebar'}>
-         {/* <div className={`sidebar ${isSidebarCollapsed ? 'collapsed' : ''} ${isContentExpanded ? 'expanded' : ''}`}> */}
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"></link>
+        <div className={'sidebar'} style={{background:primaryColor}}>
             <div className="logo">
                 <h1>Beaver Logo</h1>
-                <span className="close-icon" onClick={handleCloseIconClick}><i className="fas fa-times"></i></span>
+                <span className={"d-sm-block d-md-none"} onClick={handleCloseIconClick}>
+                    <i className="fas fa-times"></i>
+                    <FontAwesomeIcon icon={faTimes} style={iconStyle}/>
+                </span>
+
+                {/*display below only if the sidebar is collapsed*/}
+                <div className={"toggle-button d-none d-md-block mx-3"} onClick={handleOpenIconClick}>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
             </div>
 
             {isStudentPage ? (<StudentNavItems />) : (<> </>)}

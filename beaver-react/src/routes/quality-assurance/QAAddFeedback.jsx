@@ -3,6 +3,8 @@ import {faEye} from "@fortawesome/free-solid-svg-icons";
 import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {getRequest, postRequest} from "../../api/api";
+    import async from "async";
+    import Swal from "sweetalert2";
 
 export default function QAAddFeedback(){
     const iconStyle = {
@@ -13,9 +15,13 @@ export default function QAAddFeedback(){
     const [exams, setExams] = useState([]);
     const [course, setCourse] = useState({});
     const [courseObjectives, setCourseObjectives] = useState([])
+    const [commentOn, setCommentOn] = useState(''); // ['','exam', 'course_objective']
     const user = JSON.parse(localStorage.getItem('user'));
+    const [selectedExam, setSelectedExam] = useState();
     const [formData, setFormData] = useState({
-        course_id: id,
+        comment: '',
+        exam_id: '',
+        course_objective_id: '',
     });
     const navigate = useNavigate();
     const handleInputChange = (event) => {
@@ -23,32 +29,70 @@ export default function QAAddFeedback(){
             ...formData,
             [event.target.name]: event.target.value
         });
+        // if the changed input is comment_on, set commentOn state and disappear the other select
+        if(event.target.name === 'comment_on'){
+            setCommentOn(event.target.value);
+            if(event.target.value === 'exam'){
+                document.getElementById('course_objective_div').style.display = 'none';
+                document.getElementById('exam_div').style.display = 'block';
+                // unset course_objective_id
+                setFormData({
+                    ...formData,
+                    course_objective_id: ''
+                });
+            }else if(event.target.value === 'course_objective'){
+                document.getElementById('exam_div').style.display = 'none';
+                document.getElementById('course_objective_div').style.display = 'block';
+                // unset exam_id
+                setFormData({
+                    ...formData,
+                    exam_id: ''
+                });
+            }
+        }
     }
 
 
-    function handleSubmit(event){
+    const handleSubmit = async (event) => {
         event.preventDefault();
 
-        console.log(formData);
+        // if any element in formData is '' or null, remove it from formData
+        for (const [key, value] of Object.entries(formData)) {
+            if(value === '' || value === null){
+                delete formData[key];
+            }
+        }
 
         // convert formData to json string
         const data = JSON.stringify(formData);
-
+        let response = null;
         // make api call to update course objective
-        // http://beaver-backend.tvtv/course_objectives.php
         try {
-            const c = postRequest('/add_qa_feedback.php', data);
-            alert("Feedback added successfully");
+            response = await postRequest('/qa-feedback', data);
+
+            await Swal.fire({
+                title: 'Feedback added successfully!',
+                icon: 'success',
+                confirmButtonText: 'OK',
+            });
+
             // navigate to course details page using history
-            navigate(`/quality-assurance/courses`);
-            // history.push(`/instructor/courses/details/${courseId}`);
+            navigate(`/quality-assurance/courses/details/${id}`);
         }catch (e) {
-            if (e.status === 404) {
-                // alert("Course not found");
-            }else{
-                console.log(e);
-                // alert(e.data.message);
-            }
+            // display the validation error from the backend
+            await Swal.fire({
+                title: 'Error adding feedback!',
+                icon: 'error',
+                confirmButtonText: 'OK',
+                text:  response != null ? response.data.message : "Error adding feedback"
+            });
+
+            // if (e.status > 400) {
+            //     // alert("Course not found");
+            // }else{
+            //     // console.log(e);
+            //     // alert(e.data.message);
+            // }
         }
 
 
@@ -58,11 +102,10 @@ export default function QAAddFeedback(){
     useEffect(() => {
         async function fetchCourseDetails(){
             try {
-                const details = await getRequest(`/courses.php?id=${id}`);
-                console.log(details.data.data ? details.data.data : {});
-                setCourse(details.data.data ? details.data.data[0] : {});
+                const details = await getRequest(`/courses/${id}`);
+                setCourse(details.data.data);
             }catch (e) {
-                alert("Course not found");
+                // alert("Course not found");
             }
         }
         fetchCourseDetails();
@@ -71,25 +114,22 @@ export default function QAAddFeedback(){
     useEffect(() => {
         async function fetchExams(){
             try {
-                //http://beaver-backend.tvtv/exams.php?course_id=1
-                const e = await getRequest(`/exams.php?course_id=${id}`);
+                const e = await getRequest(`/exams?course_id=${id}`);
                 setExams(e.data.data);
             }catch (e) {
                 console.log(e);
                 // if http status code is 404, show alert
                 if(e.status === 404){
-                    alert("Exams not found");
+                    // alert("Exams not found");
                 }else{
-                    alert("An error occurred while fetching exams");
+                    // alert("An error occurred while fetching exams");
                 }
             }
         }
 
         async function fetchCourseObjectives(){
             try {
-                //http://beaver-backend.tvtv/course_objectives.php?course_id=1
-                console.log(user.role);
-                const obj = await getRequest(`/course_objectives.php?course_id=${id}`);
+                const obj = await getRequest(`/course-objectives?course_id=${id}`);
                 setCourseObjectives(obj.data.data);
             }catch (e) {
                 // if http status code is 404, show alert
@@ -112,41 +152,48 @@ export default function QAAddFeedback(){
                 <h2>Add Feedback</h2>
                 <form id="profile-form">
                     <div className="input-group">
-                        <label htmlFor="comment_on">Comment on:</label>
-                        <select name="comment_on" id="comment_on" onChange={handleInputChange} >
-                        <option disabled selected value> -- select an option -- </option>
+                        <label htmlFor="comment_on">Comment On:</label>
+                        <select name="comment_on" id="comment_on" defaultValue={""}
+                                onChange={handleInputChange}>
+                            <option disabled value={""}> -- select an option -- </option>
+                            <option value="exam">Exam</option>
+                            <option value="course_objective">Course Objective</option>
+                        </select>
+                    </div>
+
+                    <div className="input-group" id="course_objective_div">
+                        <label htmlFor="course_objective_id">Course Objective</label>
+                        <select name="course_objective_id" id="course_objective_id" defaultValue={""}
+                                onChange={handleInputChange} >
+                        <option disabled value={""}> -- select an option -- </option>
+                            {
+                                courseObjectives.map((courseObjective) => {
+                                    return (
+                                        <option key={courseObjective.id} value={courseObjective.id}>{courseObjective.name}</option>
+                                    )
+                                })
+                            }
+                        </select>
+                    </div>
+
+                    <div className="input-group" id="exam_div">
+                        <label htmlFor="exam_id">Exam</label>
+                        <select name="exam_id" id="exam_id" defaultValue={""} onChange={handleInputChange} >
+                        <option disabled value={""}> -- select an option -- </option>
                             {
                                 exams.map((exam) => {
                                     return (
-                                       
-                                        <option value={exam.id}>{exam.name}</option>
-                                        
+                                        <option key={exam.id} value={exam.id}>{exam.name}</option>
                                     )
                                 })
                             }
                         </select>
                     </div>
-
-                    <div className="input-group">
-                        <label htmlFor="course_obj">Course Objective</label>
-                        <select name="course_obj" id="course_obj" onChange={handleInputChange} >
-                        <option disabled selected value> -- select an option -- </option>
-                            {
-                                courseObjectives.map((exam) => {
-                                    return (
-                                       
-                                        <option value={exam.id}>{exam.name}</option>
-                                        
-                                    )
-                                })
-                            }
-                        </select>
-                    </div>
-
 
                     <div className="input-group">
                         <label htmlFor="comment">Comment:</label>
-                        <input type="text" id="comment" name="comment" required onChange={handleInputChange} /><br/><br/>
+                        <input type="text" id="comment" name="comment" required
+                               onChange={handleInputChange} /><br/><br/>
                     </div>
 
                     <input type="submit" value="Add Feedback" onClick={handleSubmit}/>

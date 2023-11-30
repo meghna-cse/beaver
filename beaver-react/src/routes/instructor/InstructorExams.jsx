@@ -1,8 +1,9 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEye, faTrash} from "@fortawesome/free-solid-svg-icons";
-import {useNavigate, useParams} from "react-router-dom";
+import {NavLink, useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {getRequest, postRequest} from "../../api/api";
+import {Col, Container} from "react-bootstrap";
 
 export default function InstructorExams(){
     const iconStyle = {
@@ -16,11 +17,9 @@ export default function InstructorExams(){
     useEffect(() => {
         async function fetchExams(){
             try {
-                //http://beaver-backend.tvtv/course_objectives.php?course_id=1
-                const obj = await getRequest(`/exams.php`);
+                const obj = await getRequest(`/exams`);
                 setExams(obj.data.data);
             }catch (e) {
-                console.log(e);
                 // if http status code is 404, show alert
                 if(e.status === 404){
                     // alert("Course exams not found");
@@ -33,9 +32,11 @@ export default function InstructorExams(){
     }, []);
 
     return (
-        <>
+        <Container>
             <h2>Exams</h2>
-            <a href="/instructor/exams/add-exam" className="custom-button">Add Exam</a>
+            <NavLink to={'/instructor/exams/add-exam'} className="custom-button">
+                Add Exam
+            </NavLink>
             <div className="table-container">
                 <table className="performance-table">
                     <thead>
@@ -57,14 +58,14 @@ export default function InstructorExams(){
                                     <tr key={exam.id}>
                                         <td>{exam.name}</td>
                                         <td>{exam.exam_date}</td>
-                                        <td>{exam.exam_type}</td>
-                                        <td>{exam.exam_format}</td>
+                                        <td>{exam.exam_type_name}</td>
+                                        <td>{exam.exam_format_name}</td>
                                         <td>{exam.max_score}</td>
                                         <td>{exam.passing_score}</td> 
                                         <td className="action-column">
-                                            <a href="/instructor/exams/student-performance">
+                                            <NavLink to={"/instructor/exams/student-performance/" + exam.id}>
                                                 <FontAwesomeIcon icon={faEye} style={iconStyle}/>
-                                            </a>
+                                            </NavLink>
                                         </td>
                                     </tr>
                                 )
@@ -74,6 +75,6 @@ export default function InstructorExams(){
                     </tbody>
                 </table>
             </div>
-        </>
+        </Container>
     )
 }

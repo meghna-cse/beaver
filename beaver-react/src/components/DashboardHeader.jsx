@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from "react";
 import "./../toggle.css";
+import {primaryColor} from "../colors";
+import {Card, Container} from "react-bootstrap";
 
 export default function DashboardHeader(props) {
     const [isContentExpanded, setIsContentExpanded] = useState(false);
@@ -36,7 +38,7 @@ export default function DashboardHeader(props) {
     //         content.classList.toggle("expanded");
     //     });
     return (
-        <header>
+        <header style={{background:primaryColor}}>
             <div className="toggle-button" onClick={handleToggleButtonClick}>
                 <span></span>
                 <span></span>

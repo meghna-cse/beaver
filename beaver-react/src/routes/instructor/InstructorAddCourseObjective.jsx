@@ -3,6 +3,8 @@ import {faEye, faTrash} from "@fortawesome/free-solid-svg-icons";
 import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {getRequest, postRequest} from "../../api/api";
+import Swal from "sweetalert2";
+import {Container, Form} from "react-bootstrap";
 
 export default function InstructorAddCourseObjective(){
     // get course id from param
@@ -13,7 +15,7 @@ export default function InstructorAddCourseObjective(){
 
     const [formData, setFormData] = useState({
         name: "",
-        course_name: course.name,
+        course_name: course.name ?? "",
         course_id: id,
         description: ""
     });
@@ -25,31 +27,32 @@ export default function InstructorAddCourseObjective(){
         });
     }
 
-    function handleSubmit(event){
+    const handleSubmit = async (event) =>{
         event.preventDefault();
         // remove the course name from the form data
         delete formData.course_name;
-
-        console.log(formData);
 
         // convert formData to json string
         const data = JSON.stringify(formData);
 
         // make api call to update course objective
-        // http://beaver-backend.tvtv/course_objectives.php
         try {
-            const c = postRequest('/add_course_objectives.php', data);
-            alert("Course objective added successfully");
+            const c = await postRequest('/course-objectives', data);
+            await Swal.fire({
+                title: 'Success!',
+                text: 'Course objective added successfully',
+                icon: 'success',
+                confirmButtonText: 'Ok'
+            });
             // navigate to course details page using history
             navigate(`/instructor/courses/details/${id}`);
-            // history.push(`/instructor/courses/details/${courseId}`);
         }catch (e) {
-            if (e.status === 404) {
-                // alert("Course not found");
-            }else{
-                console.log(e);
-                // alert(e.data.message);
-            }
+            await Swal.fire({
+                title: 'Error!',
+                text: e.response.data.message,
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            });
         }
 
 
@@ -60,7 +63,7 @@ export default function InstructorAddCourseObjective(){
         async function fetchCourseDetails(){
             // make api call to fetch all courses
             try {
-                const c = await getRequest('/courses.php');
+                const c = await getRequest('/courses');
                 setCourse(c.data.data ? c.data.data[0] : {});
                 setFormData({
                     ...formData,
@@ -68,7 +71,7 @@ export default function InstructorAddCourseObjective(){
                 })
             }catch (e) {
                 // show alert for error
-                alert("An error occurred while fetching courses");
+                // alert("An error occurred while fetching courses");
             }
         }
 
@@ -83,11 +86,11 @@ export default function InstructorAddCourseObjective(){
     }
 
     return (
-        <>
+        <Container>
             <div className={"form-container"}>
             <h2>Add Course Objective</h2>
             <form id="profile-form">
-                
+
                 <div className="input-group">
                     <label htmlFor="name">Objective Name:</label>
                     <input type="text" id="name" name="name"
@@ -104,6 +107,6 @@ export default function InstructorAddCourseObjective(){
                 <input type="submit" onClick={handleSubmit} value="Add Course Objective"/>
             </form>
             </div>
-        </>
+        </Container>
     )
 }

@@ -3,6 +3,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
     faBook,
     faComments,
+    faCommentDots,
     faGraduationCap,
     faSignOutAlt,
     faTachometerAlt,
@@ -38,6 +39,11 @@ export default function CoordinatorNavItems() {
                 <li>
                     <NavLink to={`/coordinator/profile`}>
                         <FontAwesomeIcon icon={faUser} style={iconStyle}/> Profile
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink to={"/coordinator/feedback-analysis"}>
+                        <FontAwesomeIcon icon={faCommentDots} style={iconStyle}/> Student Feedback
                     </NavLink>
                 </li>
                 <li>

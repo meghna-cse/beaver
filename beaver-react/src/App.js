@@ -19,18 +19,18 @@ function App() {
         if (currentUrl.startsWith('/student') || currentUrl.startsWith('/quality-assurance')
             || currentUrl.startsWith('/instructor') || currentUrl.startsWith('/coordinator')
             || currentUrl.startsWith('/administrator')) {
-            import('./DashboardApp.css');
+            // import('./DashboardApp.css');
         } else {
-            import('./App.css');
+            // import('./App.css');
         }
     }, [location]);
 
   return (
       <>
-          <header>
-              <h1>Beaver LMS</h1>
-              <p>Welcome to our program</p>
-          </header>
+          {/*<header>*/}
+          {/*    <h1>Beaver LMS</h1>*/}
+          {/*    <p>Welcome to our program</p>*/}
+          {/*</header>*/}
           <RootSidebar/>
           <div id="details">
               <Outlet/>

@@ -8,6 +8,7 @@ import {
     faTachometerAlt,
     faUser
 } from "@fortawesome/free-solid-svg-icons";
+import {NavLink} from "react-router-dom";
 
 export default function InstructorNavItems() {
     const iconStyle = {
@@ -17,34 +18,34 @@ export default function InstructorNavItems() {
         <>
             <ul className="menu">
                 <li>
-                    <a href="/instructor">
+                    <NavLink to={"/instructor"}>
                         <FontAwesomeIcon icon={faTachometerAlt} style={iconStyle}/> Dashboard
-                    </a>
+                    </NavLink>
                 </li>
                 <li>
-                    <a href="/instructor/courses">
+                    <NavLink to={"/instructor/courses"}>
                         <FontAwesomeIcon icon={faBook} style={iconStyle}/> Courses
-                    </a>
+                    </NavLink>
                 </li>
                 <li>
-                    <a href="/instructor/exams">
+                    <NavLink to={"/instructor/exams"}>
                         <FontAwesomeIcon icon={faBook} style={iconStyle}/> Exams
-                    </a>
+                    </NavLink>
                 </li>
                 <li>
-                    <a href="/instructor/profile">
+                    <NavLink to={"/instructor/profile"}>
                         <FontAwesomeIcon icon={faUser} style={iconStyle}/> Profile
-                    </a>
+                    </NavLink>
                 </li>
                 <li>
-                    <a href="/instructor/available-for-chat">
+                    <NavLink to={"/instructor/available-for-chat"}>
                         <FontAwesomeIcon icon={faComments} style={iconStyle}/> Chat
-                    </a>
+                    </NavLink>
                 </li>
                 <li>
-                    <a href="/login">
+                    <NavLink to={"/login"}>
                         <FontAwesomeIcon icon={faSignOutAlt} style={iconStyle}/> Logout
-                    </a>
+                    </NavLink>
                 </li>
             </ul>
         </>

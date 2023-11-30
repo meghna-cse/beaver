@@ -1,0 +1,10 @@
+export const darkPrimaryColor = '#1976D2';
+export const lightPrimaryColor = '#BBDEFB';
+export const primaryColor = '#2196F3';
+export const secondaryColor = '#2ecc71';
+export const accentColor = '#FF4081';
+export const primaryTextColor = '#212121';
+export const secondaryTextColor = '#757575';
+export const dividerColor = '#BDBDBD';
+export const textIconsColor = '#FFFFFF';
+export const warmBackground = '#e7dede';

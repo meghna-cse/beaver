@@ -8,6 +8,8 @@ import {
     faTachometerAlt, faTicket,
     faUser, faUserFriends
 } from "@fortawesome/free-solid-svg-icons";
+import {Nav} from "react-bootstrap";
+import {NavLink} from "react-router-dom";
 
 export default function AdministratorNavItems() {
     const iconStyle = {
@@ -18,39 +20,39 @@ export default function AdministratorNavItems() {
         <>
             <ul className="menu">
                 <li>
-                    <a href="/administrator">
+                    <NavLink to={'/administrator'}>
                         <FontAwesomeIcon icon={faTachometerAlt} style={iconStyle}/> Dashboard
-                    </a>
+                    </NavLink>
                 </li>
                 <li>
-                    <a href="/administrator/courses">
+                    <NavLink to={'/administrator/courses'}>
                         <FontAwesomeIcon icon={faBook} style={iconStyle}/> Courses
-                    </a>
+                    </NavLink>
                 </li>
                 <li>
-                    <a href="/administrator/profile">
+                    <NavLink to={'/administrator/profile'}>
                         <FontAwesomeIcon icon={faUser} style={iconStyle}/> Profile
-                    </a>
+                    </NavLink>
                 </li>
                 <li>
-                    <a href="/administrator/available-for-chat">
+                    <NavLink to={'/administrator/available-for-chat'}>
                         <FontAwesomeIcon icon={faComments} style={iconStyle}/> Chat
-                    </a>
+                    </NavLink>
                 </li>
                 <li>
-                    <a href="/administrator/issue-management">
+                    <NavLink to={'/administrator/issue-management'}>
                         <FontAwesomeIcon icon={faTicket} style={iconStyle}/> Issue Management
-                    </a>
+                    </NavLink>
                 </li>
                 <li>
-                    <a href="/administrator/user-management">
+                    <NavLink to={'/administrator/user-management'}>
                         <FontAwesomeIcon icon={faUserFriends} style={iconStyle}/> User Management
-                    </a>
+                    </NavLink>
                 </li>
                 <li>
-                    <a href="/login">
+                    <NavLink to={'/login'}>
                         <FontAwesomeIcon icon={faSignOutAlt} style={iconStyle}/> Logout
-                    </a>
+                    </NavLink>
                 </li>
             </ul>
         </>

@@ -14,9 +14,9 @@ export default function CourseDetails_PC(){
     useEffect(() => {
         async function fetchCourseDetails(){
             try {
-                const details = await getRequest(`/courses.php?id=${id}`);
+                const details = await getRequest(`/courses/${id}`);
                 // console.log(details.data.data ? details.data.data : {});
-                setCourse(details.data.data ? details.data.data[0] : {});
+                setCourse(details.data.data);
             }catch (e) {
                 if (e.status === 404) {
                     // alert("Course not found");
@@ -30,7 +30,7 @@ export default function CourseDetails_PC(){
             try {
                 //http://beaver-backend.tvtv/course_objectives.php?course_id=1
                 console.log(user.role);
-                const obj = await getRequest(`/course_objectives.php?course_id=${id}`);
+                const obj = await getRequest(`/course-objectives?course=${id}`);
                 setCourseObjectives(obj.data.data);
             }catch (e) {
                 // if http status code is 404, show alert
@@ -44,8 +44,7 @@ export default function CourseDetails_PC(){
 
         async function fetchCourseExams(){
             try {
-                //http://beaver-backend.tvtv/course_objectives.php?course_id=1
-                const obj = await getRequest(`/exams.php?course_id=${id}`);
+                const obj = await getRequest(`/exams?course_id=${id}`);
                 setCourseExams(obj.data.data);
             }catch (e) {
                 console.log(e);
@@ -60,8 +59,7 @@ export default function CourseDetails_PC(){
 
         async function fetchQAFeedback(){
             try {
-                //http://beaver-backend.tvtv/course_objectives.php?course_id=1
-                const obj = await getRequest(`/qa_feedbacks.php?course_id=${id}`);
+                const obj = await getRequest(`/qa-feedback?course_id=${id}`);
                 setQaFeedback(obj.data.data);
             }catch (e) {
                 console.log(e);

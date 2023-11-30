@@ -3,22 +3,23 @@ import {faEye, faTrash} from "@fortawesome/free-solid-svg-icons";
 import {useEffect, useState} from "react";
 import {getRequest} from "../../api/api";
 import {NavLink} from "react-router-dom";
+import {Container} from "react-bootstrap";
 
 export default function QualityAssuranceCourses(){
     const [courses, setCourses] = useState([]);
 
-    useEffect(() => {
-        async function fetchAllAvailableCourses(){
-            // make api call to fetch all courses
-            try {
-                const c = await getRequest('/courses.php');
-                setCourses(c.data.data);
-            }catch (e) {
-                // show alert for error
-                alert("An error occurred while fetching courses");
-            }
+    async function fetchAllAvailableCourses(){
+        // make api call to fetch all courses
+        try {
+            const c = await getRequest('/courses');
+            setCourses(c.data.data);
+        }catch (e) {
+            // show alert for error
+            // alert("An error occurred while fetching courses");
         }
+    }
 
+    useEffect(() => {
         fetchAllAvailableCourses();
     }, []);
 
@@ -30,7 +31,7 @@ export default function QualityAssuranceCourses(){
     }
 
     return (
-        <>
+        <Container>
             <h2>Available Courses</h2>
             <table className="performance-table">
                 <thead>
@@ -46,7 +47,7 @@ export default function QualityAssuranceCourses(){
                         return (
                             <tr key={course.id}>
                                 <td>{course.name}</td>
-                                <td>{course.instructor_name}</td>
+                                <td>{course.instructor_name == '' ? "N/A" : course.instructor_name}</td>
                                 <td className="action-column">
                                     <NavLink to={`/quality-assurance/courses/details/${course.id}`}>
                                         <FontAwesomeIcon icon={faEye} style={iconStyle}/>
@@ -58,6 +59,6 @@ export default function QualityAssuranceCourses(){
                 }
                 </tbody>
             </table>
-        </>
+        </Container>
     )
 }

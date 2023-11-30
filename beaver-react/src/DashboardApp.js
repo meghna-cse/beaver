@@ -4,14 +4,14 @@ import {Outlet, useLocation} from "react-router-dom";
 import Footer from "./components/Footer";
 import DashboardSidebar from "./components/DashboardSidebar";
 import DashboardHeader from "./components/DashboardHeader";
-import {ProtectedRoute} from "./components/utils/ProtectedRoute";
-import {AuthLayout} from "./components/utils/AuthLayout";
+import {Container} from "react-bootstrap";
+import DashboardFooter from "./components/DashboardFooter";
 function DashboardApp() {
     // fetch the user name from the local storage
     const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
 
     return (
-        <>
+        <Container fluid>
             <DashboardSidebar/>
             <div className="content">
                 <DashboardHeader headerName={user.name}/>
@@ -19,8 +19,8 @@ function DashboardApp() {
                     <Outlet/>
                 </main>
             </div>
-            <Footer/>
-        </>
+            <DashboardFooter/>
+        </Container>
     )
 }
 

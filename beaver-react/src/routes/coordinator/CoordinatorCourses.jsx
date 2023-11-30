@@ -1,8 +1,9 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEye, faTrash} from "@fortawesome/free-solid-svg-icons";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {getRequest} from "../../api/api";
 import {NavLink} from "react-router-dom";
+import {Container} from "react-bootstrap";
 
 export default function CoordinatorCourses(){
     const [courses, setCourses] = useState([]);
@@ -11,11 +12,11 @@ export default function CoordinatorCourses(){
         async function fetchAllAvailableCourses(){
             // make api call to fetch all courses
             try {
-                const c = await getRequest('/courses.php');
+                const c = await getRequest('/courses');
                 setCourses(c.data.data);
             }catch (e) {
                 // show alert for error
-                alert("An error occurred while fetching courses");
+                // alert("An error occurred while fetching courses");
             }
         }
 
@@ -30,7 +31,7 @@ export default function CoordinatorCourses(){
     }
 
     return (
-        <>
+        <Container>
             <h2>Available Courses</h2>
             <table className="performance-table">
                 <thead>
@@ -46,7 +47,7 @@ export default function CoordinatorCourses(){
                         return (
                             <tr key={course.id}>
                                 <td>{course.name}</td>
-                                <td>{course.instructor_name}</td>
+                                <td>{course.instructor_name !== "" ? course.instructor_name : "N/A"}</td>
                                 <td className="action-column">
                                     <NavLink to={`/coordinator/courses/details/${course.id}`}>
                                         <FontAwesomeIcon icon={faEye} style={iconStyle}/>
@@ -58,6 +59,6 @@ export default function CoordinatorCourses(){
                 }
                 </tbody>
             </table>
-        </>
+        </Container>
     )
 }

@@ -1,44 +1,84 @@
 import React, {useState} from "react";
 import {NavLink} from "react-router-dom";
+import {Carousel, Container} from "react-bootstrap";
+import HomeCarouselImage from "../components/HomeCarouselImage";
 
 export default function Home(){
-    const [translateX,setTranslateX] = useState(-300);
+    const [index, setIndex] = useState(0);
 
-    const moveLeft = () => {
-        setTranslateX(((translateX -100) ) % 300);
-    }
+    const handleSelect = (selectedIndex) => {
+        setIndex(selectedIndex);
+    };
 
-    const moveRight = () => {
-        setTranslateX((translateX + 100) % 300 > 0 ? ((translateX + 100) % 300) * -1 : (translateX + 100) % 300);
-    }
+    const images = [
+        {
+            id: 1,
+            src: "/images/home_school.jpg",
+            alt: "Learn today, lead tomorrow.",
+            caption: "Embrace the opportunity to learn today, and you'll find yourself confidently leading the way tomorrow. Every lesson is a step toward a brighter future."
+        },
+        {
+            id: 2,
+            src: "/images/home_school_2.jpg",
+            alt: "Knowledge is power.",
+            caption: "In the pursuit of knowledge, you discover the true essence of power. Allow curiosity to be your guide, and let the wisdom you gain shape your path."
+        },
+        {
+            id: 3,
+            src: "/images/home_school_3.jpg",
+            alt: "Study hard, dream big.",
+            caption: "Dive into your studies with determination and passion. As you absorb knowledge, let your dreams expand. Remember, the harder you study, the larger your dreams can grow."
+        },
+    ]
 
     const styleWidth = {
         width: '90%',
     }
 
     return (
-        <>
-            <div className="carousel-container">
-                <button className="carousel-button prev" onClick={moveLeft} >Previous</button>
-                <div className="carousel" style={{transform:`translateX(${translateX}%)`}}>
-                    <div className="carousel-item">
-                        <img src="/images/home_school.jpg" width={12} height={12} alt="Course 1"/>
-                    </div>
-                    <div className="carousel-item">
-                        <img src="/images/home_school_2.jpg" width={12} height={12} alt="Course 2"/>
-                    </div>
-                    <div className="carousel-item">
-                        <img src="/images/home_school_3.jpg" width={12} height={12} alt="Course 3"/>
-                    </div>
+        <Container>
+            {/*<div className="carousel-container">*/}
+            {/*    <button className="carousel-button prev" onClick={moveLeft} >Previous</button>*/}
+            {/*    <div className="carousel" style={{transform:`translateX(${translateX}%)`}}>*/}
+            {/*        <div className="carousel-item">*/}
+            {/*            <img src="/images/home_school.jpg" width={12} height={12} alt="Course 1"/>*/}
+            {/*        </div>*/}
+            {/*        <div className="carousel-item">*/}
+            {/*            <img src="/images/home_school_2.jpg" width={12} height={12} alt="Course 2"/>*/}
+            {/*        </div>*/}
+            {/*        <div className="carousel-item">*/}
+            {/*            <img src="/images/home_school_3.jpg" width={12} height={12} alt="Course 3"/>*/}
+            {/*        </div>*/}
 
-                </div>
-                <button className="carousel-button next" onClick={moveRight}>Next</button>
-            </div>
+            {/*    </div>*/}
+            {/*    <button className="carousel-button next" onClick={moveRight}>Next</button>*/}
+            {/*</div>*/}
 
-            <div className="container">
-                {/* Program details section */}
-                <div className="program-details" style={styleWidth}>
+            <Carousel activeIndex={index} onSelect={handleSelect}>
+                {
+                    images.map((image) => {
+                        return (
+                            <Carousel.Item key={image.id}>
+                                <HomeCarouselImage text="First slide" imagePath={image.src}/>
+                                <Carousel.Caption>
+                                    <h3>{image.alt}</h3>
+                                    <p>{image.caption}</p>
+                                </Carousel.Caption>
+                            </Carousel.Item>
+                        )
+                    })
+                }
+                {/*<Carousel.Item>*/}
+                {/*    <HomeCarouselImage text="First slide" imagePath={'/images/home_school.jpg'}/>*/}
+                {/*    <Carousel.Caption>*/}
+                {/*        <h3>First slide label</h3>*/}
+                {/*        <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>*/}
+                {/*    </Carousel.Caption>*/}
+                {/*</Carousel.Item>*/}
+            </Carousel>
 
+            <Container>
+                <div className="program-details">
                     <h2>Department Overview</h2>
                     <p>Welcome to the Computing Department, where innovation meets education. Our department is committed to fostering a dynamic and enriching environment for students, faculty, and researchers in the ever-evolving field of computing.</p>
 
@@ -56,7 +96,8 @@ export default function Home(){
                     <p>For inquiries or to get in touch with our department, please feel free to <NavLink to={'contact'}>contact us.</NavLink>
                     </p>
                 </div>
-            </div>
-        </>
+            </Container>
+
+        </Container>
     )
 }

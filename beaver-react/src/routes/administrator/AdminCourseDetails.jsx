@@ -3,6 +3,7 @@ import { faEye } from "@fortawesome/free-solid-svg-icons";
 import {Link, NavLink} from 'react-router-dom';
 import React, {useEffect, useState} from "react";
 import {getRequest} from "../../api/api";
+import {Container} from "react-bootstrap";
 
 export default function AdminCourseDetails(){
     const [courses, setCourses] = useState([]);
@@ -11,11 +12,11 @@ export default function AdminCourseDetails(){
         async function fetchAllAvailableCourses(){
             // make api call to fetch all courses
             try {
-                const c = await getRequest('/courses.php');
+                const c = await getRequest('/courses');
                 setCourses(c.data.data);
             }catch (e) {
                 // show alert for error
-                alert("An error occurred while fetching courses");
+                // alert("An error occurred while fetching courses");
             }
         }
 
@@ -29,7 +30,7 @@ export default function AdminCourseDetails(){
     }
 
     return (
-        <>
+        <Container>
             <h2>Available Courses</h2>
             <table className="performance-table">
                 <thead>
@@ -45,7 +46,7 @@ export default function AdminCourseDetails(){
                         return (
                             <tr key={course.id}>
                                 <td>{course.name}</td>
-                                <td>{course.instructor_name}</td>
+                                <td>{course.instructor_name !== "" ? course.instructor_name : "N/A"}</td>
                                 <td className="action-column">
                                     <NavLink to={`/administrator/courses/details/${course.id}`}>
                                         <FontAwesomeIcon icon={faEye} style={iconStyle}/>
@@ -60,6 +61,6 @@ export default function AdminCourseDetails(){
                 }
                 </tbody>
             </table>
-        </>
+        </Container>
     )
 }

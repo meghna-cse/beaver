@@ -2,6 +2,8 @@ import {useState} from "react";
 import {getRequest, postRequest} from "../api/api";
 import {useAuth} from "../components/utils/AuthProvider";
 import {NavLink, useNavigate} from "react-router-dom";
+import {Button, Container, Form} from "react-bootstrap";
+import Swal from "sweetalert2";
 
 export default function Login(){
    // create json object to store form data
@@ -22,19 +24,38 @@ export default function Login(){
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        // convert formData to json string
 
-        // make api call to login
-        const response = await postRequest('/login.php', formData);
+        try {
+            // make api call to login
+            const response = await postRequest('/login', formData);
 
-        // if login is successful, redirect to home page
-        if(response.data.status === "success"){
-            login(response.data.data.user,response.data.data.token);
-            console.log(response.data.data.user);
-            // navigate to appropriate page based on the user's role USING
-            userDashboard(response.data.data.user)
-        }else{
-            alert(response.data.message);
+            // if login is successful, redirect to home page
+            if(response.data.status === "success"){
+                login(response.data.data.user,response.data.data.token);
+                // navigate to appropriate page based on the user's role USING
+                userDashboard(response.data.data.user)
+            } else{
+                // alert(response.data.message);
+                await Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: response.data.message,
+                });
+            }
+        }catch (e){
+            if (e.response.status >= 400) {
+                await Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: e.response.data.message,
+                });
+            }else{
+                await Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: e.response.data.message,
+                });
+            }
         }
     }
 
@@ -62,27 +83,28 @@ export default function Login(){
     };
 
     return (
-        <div className="container">
-            <div className="login-container">
-                <h2>Login</h2>
-                <form id="login-form" onSubmit={handleSubmit}>
-                    <div className="input-group">
-                        <label htmlFor="username">Username:</label>
-                        <input type="text" id="username" name="username" value={formData.username} onChange={handleInputChange} required/>
-                    </div>
-                    <div className="input-group">
-                        <label htmlFor="password">Password:</label>
-                        <input type="password" id="password" name="password" value={formData.password} onChange={handleInputChange} required/>
-                    </div>
-                    <button type="submit">Login</button>
-                    <div>
-                        {/*<a href="register.html">Don't have an account? Register</a>*/}
-                        <NavLink to={`/register`}>Don't have an account? Register</NavLink>
-                        <span className="space-between"></span>
-                        {/*<a href="forgot-password.html">Forgot Password?</a>*/}
-                    </div>
-                </form>
+        <Container>
+            <h2>Login</h2>
+            <Form>
+                <Form.Group className="mb-3" controlId="username">
+                    <Form.Label>Username</Form.Label>
+                    <Form.Control type="text" placeholder="Enter username" name="username"
+                                  value={formData.username} onChange={handleInputChange} required/>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="password">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control type="password" placeholder="Enter password" name="password"
+                                  value={formData.password} onChange={handleInputChange} required/>
+                </Form.Group>
+                <Button variant="primary" type="submit" onClick={handleSubmit}>
+                    Submit
+                </Button>
+            </Form>
+            <div>
+                <NavLink to={`/register`}>Don't have an account? Register</NavLink>
+                <br/>
+                <NavLink to={`/forgot-password`}>Forgot Password?</NavLink>
             </div>
-        </div>
+        </Container>
     )
 }

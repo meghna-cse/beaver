@@ -1,42 +1,31 @@
 import * as React from "react";
+
 import {Link, NavLink, Outlet} from "react-router-dom";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faBars} from "@fortawesome/free-solid-svg-icons";
+import {Container, Nav, Navbar} from "react-bootstrap";
+import {accentColor, primaryColor, textIconsColor} from "../colors";
 
 export default function RootSidebar(){
-    const [menuActive,setMenuActive] = React.useState(false);
-    const toggleMenu = () => {
-        // check if the screen size is less than 768px
-        if(window.innerWidth < 768) {
-            setMenuActive(!menuActive);
-        }
-    }
     return (
         <>
             <header>
-                <nav>
-                    <div className="nav-container">
-                        <div className="logo">
-                            <a href={'/'}>Logo</a>
-                        </div>
-                        <div className="menu-toggle" onClick={toggleMenu}>
-                            {/*<i className="fas fa-bars"></i>*/}
-                            <FontAwesomeIcon icon={faBars} />
-                        </div>
-                        <ul className={`menu ${menuActive ? 'active' : ''}`}>
-                            <li><NavLink onClick={toggleMenu} to={'/'}>Home</NavLink></li>
-                            <li><NavLink onClick={toggleMenu} to={'services'}>Services</NavLink></li>
-                            <li><NavLink onClick={toggleMenu} to={'about'}>About Us</NavLink></li>
-                            <li><NavLink onClick={toggleMenu} to={'contact'}>Contact Us</NavLink></li>
-                            <li><NavLink onClick={toggleMenu} to={'register'}>Register</NavLink></li>
-                            <li><a href="http://mxj3631.uta.cloud/blog/">Blog</a></li>
-                            <li><NavLink onClick={toggleMenu} to={'login'}>Login</NavLink></li>
-                            {/* <li><NavLink onClick={toggleMenu} to={'only-for-demo'}>Only For Demo</NavLink></li> */}
-                        </ul>
-                    </div>
-                </nav>
+                <Navbar expand="lg" className={"navbar-dark"}>
+                    <Container style={{ background: accentColor }}>
+                        <Navbar.Brand className={'text-white-300'} as={NavLink} to={"/"} style={{ fontWeight: 'bold' }}>Beaver LMS</Navbar.Brand>
+                        <Navbar.Toggle className={'text-white'} aria-controls="basic-navbar-nav" />
+                        <Navbar.Collapse id="basic-navbar-nav" className={"justify-content-end"}>
+                            <Nav>
+                                <Nav.Link as={NavLink} to={"/"} style={{ fontWeight: 'bold' }}>Home</Nav.Link>
+                                <Nav.Link as={NavLink} to={"/services"} style={{ fontWeight: 'bold' }}>Services</Nav.Link>
+                                <Nav.Link as={NavLink} to={"/about"} style={{ fontWeight: 'bold' }}>About Us</Nav.Link>
+                                <Nav.Link as={NavLink} to={"/contact"} style={{ fontWeight: 'bold' }}>Contact Us</Nav.Link>
+                                <Nav.Link as={NavLink} to={"/register"} style={{ fontWeight: 'bold' }}>Register</Nav.Link>
+                                <Nav.Link as={NavLink} to={"/login"} style={{ fontWeight: 'bold' }}>Login</Nav.Link>
+                                <Nav.Link href="http://mxj3631.uta.cloud/blog/" style={{ fontWeight: 'bold' }}>Blog</Nav.Link>
+                            </Nav>
+                        </Navbar.Collapse>
+                    </Container>
+                </Navbar>
             </header>
-
         </>
     )
 }

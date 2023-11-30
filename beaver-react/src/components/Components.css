@@ -1,0 +1,19 @@
+/*
+Kotian, Apeksha Appu :  1002074079
+Jaglan, Meghna :  1002053631
+Kopparthi, Sai Venkat Reddy :  1002113962
+Moturi, Sesha Sai Srilekha :  1002110596
+Konagari, Vishnupriya Reddy :  1002118979
+*/
+
+/* Feedback Analysis Dashboard */
+.positive-feedback {
+  background-color: #d4edda; /* Light green */
+}
+.neutral-feedback {
+  background-color: #fff3cd; /* Light yellow */
+}
+.negative-feedback {
+  background-color: #f8d7da; /* Light red */
+}
+/* End Feedback Analysis Dashboard */
