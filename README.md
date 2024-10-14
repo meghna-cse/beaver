@@ -6,6 +6,7 @@ Beaver is a Learning Management System developed as a semester-long group projec
 
 ![projectImage_Beaver](https://github.com/meghna-cse/beaver/assets/24985713/1052277e-8f16-4a1f-93e6-1c0bfd65b03f)
 
+Recorded Demo: [YouTube Link](https://youtu.be/PVVvpJjnF38?feature=shared)
 
 ## Wiki
 
